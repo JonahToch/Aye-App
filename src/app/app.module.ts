@@ -48,6 +48,7 @@ import { UsMapModule } from 'angular-us-map';
 import { UnitedStatesMapComponent } from './united-states-map/united-states-map.component';
 import {QRCodeModule} from "angularx-qrcode";
 import { QrCodeComponent } from './dialogs/qr-code/qr-code/qr-code.component';
+import { SesameComponent } from './components/sesame/sesame.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { QrCodeComponent } from './dialogs/qr-code/qr-code/qr-code.component';
     StatExplanationComponent,
     LocationExplanationComponent,
     UnitedStatesMapComponent,
-    QrCodeComponent
+    QrCodeComponent,
+    SesameComponent
   ],
   imports: [
     BrowserModule,

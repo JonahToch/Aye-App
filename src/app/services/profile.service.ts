@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment.prod";
 import {Auth0Client} from '@auth0/auth0-spa-js';
 import {BehaviorSubject, catchError, map, Observable, of} from "rxjs";
 import {Poop} from "../models/poop";
+import {AyeUser} from "../interfaces/aye-user";
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,45 @@ export class ProfileService {
   constructor(public auth: AuthService,
               private http: HttpClient,
   ) {
+  }
+
+  updateUserMetadata(ayeUser: AyeUser | undefined, userId: string | undefined, authToken: string | undefined): void {
+    // const url: string = `${environment.mainApiUrl}/users`;
+    const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId
+    // const body = {
+    //     "bio": '555',
+    //     "updateUrl": 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId,
+    //     "authToken": authToken
+    // }
+
+    const body = {
+      user_metadata: {
+        "bio": 'test123',
+      }
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken,
+        },
+      )
+    };
+
+
+    console.log(url);
+    console.log(body);
+    // console.log(httpOptions);
+    console.log(authToken);
+
+    this.http.patch<any>(url, body, httpOptions).subscribe(
+      (value) => {
+        console.log(value);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   getAllUsers(userId: string | undefined, authToken: string | undefined): Observable<any> {
@@ -52,95 +92,9 @@ export class ProfileService {
     // console.log('after');
   }
 
-  // TODO: refactor to make it so we can have one function that updates all user metadata. Takes array of parameters
 
 
-  updateProfileUsername(userId: string | undefined, authToken: string | undefined, ayeUsername: string | undefined): void {
-    const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId
-    console.log(userId, authToken);
-    const body = {
-      user_metadata: {
-        "ayeUsername": ayeUsername,
-        // "profilePicUrl": 'https://i.insider.com/59ca65fefca6e427008b4776?width=1750&format=jpeg&auto=webp',
-      }
-    }
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer " + authToken,
-        "Access-Control-Allow-Origin": "*",
-      })
-    }
-
-    this.http.patch<any>(url, body, httpOptions).subscribe(
-      (value) => {
-        console.log('succeed');
-        console.log(value);
-      },
-      (error) => {
-        console.log('error');
-        console.log(error);
-      }
-    );
-  }
-
-  updateProfileBio(userId: string | undefined, authToken: string | undefined, bio: string | undefined): void {
-    const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId
-    console.log(userId, authToken);
-    const body = {
-      user_metadata: {
-        "bio": bio,
-        // "profilePicUrl": 'https://i.insider.com/59ca65fefca6e427008b4776?width=1750&format=jpeg&auto=webp',
-      }
-    }
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer " + authToken,
-        "Access-Control-Allow-Origin": "*",
-      })
-    }
-
-    this.http.patch<any>(url, body, httpOptions).subscribe(
-      (value) => {
-        console.log('succeed');
-        console.log(value);
-      },
-      (error) => {
-        console.log('error');
-        console.log(error);
-      }
-    );
-  }
-
-  updateProfilePic(userId: string | undefined, authToken: string | undefined, profilePicUrl: string | undefined): void {
-    const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId
-    console.log(userId, authToken);
-    const body = {
-      user_metadata: {
-        "profilePicUrl": profilePicUrl,
-        // "profilePicUrl": 'https://i.insider.com/59ca65fefca6e427008b4776?width=1750&format=jpeg&auto=webp',
-      }
-    }
-
-    const httpOptions = {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer " + authToken,
-        "Access-Control-Allow-Origin": "*",
-      })
-    }
-
-    this.http.patch<any>(url, body, httpOptions).subscribe(
-      (value) => {
-        console.log('succeed');
-        console.log(value);
-      },
-      (error) => {
-        console.log('error');
-        console.log(error);
-      }
-    );
-  }
 
 
 }

@@ -1,23 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {GoblinDatingSimulatorComponent} from "./goblin-dating-simulator/goblin-dating-simulator.component";
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import {AyesAndBaesComponent} from "./ayes-and-baes/ayes-and-baes.component";
 import {PoopDiariesComponent} from "./poop-diaries/poop-diaries.component";
-import {BerglerComponent} from "./bergler/bergler.component";
 import {HomeComponent} from "./home/home.component";
-import {PokayemonComponent} from "./pokayemon/pokayemon.component";
 import {PoopFormComponent} from "./poop-form/poop-form.component";
 import {MaintenanceComponent} from "./maintenance/maintenance.component";
 import {LeaderboardsComponent} from "./leaderboards/leaderboards.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {SoftballComponent} from "./softball/softball.component";
+import {SesameComponent} from "./components/sesame/sesame.component";
 
 const routes: Routes = [
 
-  // { path: 'goblin-dating-simulator',
-  //   component: GoblinDatingSimulatorComponent
-  // },
   { path: 'softball',
     component: SoftballComponent,
     title: "Aye - Aye's & Bae's"
@@ -26,12 +19,10 @@ const routes: Routes = [
     component: PoopDiariesComponent,
     title: 'Aye - Poop Diaries'
   },
-  // { path: 'bergler',
-  //   component: BerglerComponent
-  // },
-  // { path: 'pokayemon',
-  //   component: PokayemonComponent
-  // },
+  { path: 'sesame',
+    component: SesameComponent,
+    title: "Aye - Sesame"
+  },
   { path: 'poop-form',
     component: PoopFormComponent,
     title: 'Aye - Poop Form',

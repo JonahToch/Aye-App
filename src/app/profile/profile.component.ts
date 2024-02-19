@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {TrophyDialogComponent} from "../dialogs/trophy-dialog/trophy-dialog.component";
 import {MatTooltip} from "@angular/material/tooltip";
-import {Router} from "@angular/router";
+import {NavigationEnd, Router} from "@angular/router";
 import {AuthService} from "@auth0/auth0-angular";
 import {ProfileService} from "../services/profile.service";
-import {BehaviorSubject, concatMap, map, Observable, of, tap} from "rxjs";
+import {BehaviorSubject, concatMap, filter, map, Observable, of, Subscription, tap} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {AyeUser} from "../interfaces/aye-user";
 import {SharedDataService} from "../services/shared-data.service";
@@ -23,16 +23,20 @@ import {
 })
 export class ProfileComponent implements OnInit {
 
+  routerSubscription!: Subscription;
+
   userNotFound: boolean = false;
   loading: boolean = false;
+  invalidImageError: boolean = false;
   profileUsername: string = '';
+  profileChangesMade: boolean = false;
+
   newProfilePicUrl: string = '';
+  editingBio: boolean = false;
+  newBio: string = '';
 
   fullProfileUrl: string;
-  editingBio: boolean = false;
-  profileChangesMade: boolean = false;
   ayeUser: AyeUser | undefined;
-  invalidImageError: boolean = false;
 
   private profileList_: BehaviorSubject<any> = new BehaviorSubject(null);
   profileList$: Observable<any> = this.profileList_.asObservable();
@@ -55,7 +59,6 @@ export class ProfileComponent implements OnInit {
             (res) => {
               if (res) {
                 this.ayeUser = res;
-                this.loading = false;
               } else {
                 this.auth.user$
                   .pipe(
@@ -67,7 +70,6 @@ export class ProfileComponent implements OnInit {
                     ),
                     tap((ayeUser: any) => {
                         this.setAyeUser(ayeUser);
-                        console.log(ayeUser)
                       }
                     )
                   )
@@ -83,13 +85,28 @@ export class ProfileComponent implements OnInit {
     )
   }
 
+  ngOnDestroy() {
+    this.routerSubscription.unsubscribe();
+
+  }
 
   ngOnInit(): void {
+
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      console.log(event.url.substring(2, event.url.length));
+      console.log(this.profileUsername)
+      if (this.profileUsername !== event.url.substring(2, event.url.length)) {
+        window.location.reload();
+      }
+    });
+
     if (this.router.url.substring(0, 2) !== '/@') {
       this.router.navigate(['/']).then();
     }
     this.profileUsername = this.router.url.substring(2, this.router.url.length);
-    // this.getManagementAuthToken();
+    this.getManagementAuthToken();
   }
 
   setAyeUser(ayeUser: AyeUser) {
@@ -101,35 +118,8 @@ export class ProfileComponent implements OnInit {
     this.ayeUser!.user_metadata.profilePicUrl = '/assets/images/goblin-silhouette.png';
   }
 
-  getManagementAuthToken() {
-    return this.sharedDataService.getManagementAuthToken().subscribe(
-      (res): void => {
-        // console.log(res);
-        this.sharedDataService.getUser(this.profileUsername, res.access_token).subscribe(
-          (res): void => {
-            // console.log(res);
-            if (res.length === 0) {
-              this.userNotFound = true;
-            } else {
-              console.log(res[0]);
-              this.ayeUser = res[0];
-            }
-          },
-          (error): void => {
-            console.log(error);
-          },
-          () => {
-            this.loading = false;
-            console.log(this.loading)
-          }
-        )
-      }
-    );
-  }
-
-
   changeBio(event: any) {
-    this.ayeUser!.user_metadata!.bio = event.target.value;
+    this.newBio = event.target.value;
     this.profileChangesMade = true;
   }
 
@@ -137,11 +127,6 @@ export class ProfileComponent implements OnInit {
     this.invalidImageError = false;
     this.newProfilePicUrl = event.target.value;
     this.profileChangesMade = true;
-  }
-
-
-  openTrophyDialog() {
-    this.dialog.open(TrophyDialogComponent);
   }
 
   openQRCodeDialog(): void {
@@ -155,28 +140,18 @@ export class ProfileComponent implements OnInit {
     this.dialog.open(QrCodeComponent, dialogConfig);
   }
 
-  getProfile(userId: string | undefined, authToken: string | undefined) {
-    // console.log('test 1');
-    // console.log(userId, authToken);
-    return this.profileService.getProfile(userId, authToken).subscribe();
-  }
-
   updateProfile(userId: string | undefined, authToken: string | undefined) {
-    if (this.ayeUser!.user_metadata!.ayeUsername) {
-      this.profileService.updateProfileUsername(userId, authToken, this.ayeUser!.user_metadata!.ayeUsername);
-      this.profileChangesMade = false;
-    }
-    if (this.ayeUser!.user_metadata!.bio) {
-      this.profileService.updateProfileBio(userId, authToken, this.ayeUser!.user_metadata!.bio);
-      this.profileChangesMade = false;
-      this.editingBio = false;
+    if (this.newBio) {
+      this.ayeUser!.user_metadata!.bio = this.newBio;
     }
     if (this.newProfilePicUrl) {
       this.ayeUser!.user_metadata!.profilePicUrl = this.newProfilePicUrl;
-      this.profileService.updateProfilePic(userId, authToken, this.ayeUser!.user_metadata!.profilePicUrl);
-      this.profileChangesMade = false;
-      this.editingBio = false;
     }
+
+    this.profileService.updateUserMetadata(this.ayeUser, userId, authToken);
+
+    this.editingBio = false;
+    this.profileChangesMade = false;
   }
 
   redirectToHome() {
@@ -185,6 +160,29 @@ export class ProfileComponent implements OnInit {
 
   toStandardDate(date: Date): string {
     return this.dateService.toStandardDate(date);
+  }
+
+  getManagementAuthToken() {
+    return this.sharedDataService.getManagementAuthToken().subscribe(
+      (res): void => {
+        this.sharedDataService.getUser(this.profileUsername, res.access_token).subscribe(
+          (res): void => {
+            console.log(res); // wonah
+            if (res.length === 0) {
+              this.userNotFound = true;
+            } else {
+              this.ayeUser = res[0];
+            }
+          },
+          (error): void => {
+            console.log(error);
+          },
+          () => {
+            this.loading = false;
+          }
+        )
+      }
+    );
   }
 
 }

@@ -1,0 +1,46 @@
+<br><br>
+<div style="display: flex; justify-content: center">
+  <p style="font-size: 36px"><i>Sesame🥯</i></p>
+</div>
+<br>
+
+<div style="display: flex; justify-content: center; overflow: hidden">
+  <br><br><br>
+  <button mat-raised-button (click)="openSesame()"
+          style="font-family: serif; background-color: cadetblue; height: 88px; width: 45%;
+          max-width: 220px; font-size: 23px;">
+    <b><span style="padding: 300px">🚪</span><br><br> Open Door<br></b></button>
+</div>
+
+<br>
+
+<ng-container *ngIf="loading">
+  <div style="display: flex; justify-content: center; margin-top: 10%;">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div style="display: flex; justify-content: center; margin-top: 10%;">
+    <b>Opening door....</b>
+  </div>
+
+
+</ng-container>
+
+<div style="display: flex; justify-content: center; overflow: hidden">
+
+  <mat-error *ngIf="openSesameStatus === 'failure'"
+             style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold">
+    Opening the door failed.
+
+    <br><br>
+    Make sure the device is powered and on.
+  </mat-error>
+
+  <div *ngIf="openSesameStatus === 'success'"
+       style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold; color: green">
+    The door was opened.
+
+  </div>
+
+</div>
+
+

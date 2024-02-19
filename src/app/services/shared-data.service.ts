@@ -38,18 +38,22 @@ export class SharedDataService {
     if (this.managementAuthToken_.getValue()) {
       return this.managementAuthToken$;
     }
-    console.log(this.managementAuthToken_.getValue());
-    const url: string = `${environment.mainApiUrl}/auth?type=managementToken`;
+    const url: string = `${environment.mainApiUrl}/auth`;
     return this.http.get(url).pipe((res) => {
-      this.managementAuthToken_.next(res);
+      res.subscribe((res: any) => {
+      /*  console.log(res)/!**!/*/
+        this.managementAuthToken_.next(res);
+      })
       return res;
     })
   }
 
   getUser(username: string, managementAuthToken: string): Observable<any> {
-    if (this.ayeUser_) {
-      return this.ayeUser$;
-    }
+  //   console.log('running getUser');
+  //   if (this.ayeUser_) {
+  //     console.log('we have ayeUser');
+  //     return this.ayeUser$;
+  //   }
     const url: string = `${environment.mainApiUrl}/users?type=isUsernameUnique&username=` + username + `&token=` + managementAuthToken;
     return this.http.get(url).pipe((res) => {
       res.subscribe((res: any) => {

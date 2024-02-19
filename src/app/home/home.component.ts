@@ -60,20 +60,14 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params: Params): void => {
       if (params['dev'] === 'true') {
         this.sharedDataService.isDevMode = 'true';
+        this.auth.isAuthenticated$.subscribe((res: boolean) => {
+            if (res) {
+              this.getManagementAuthToken();
+            }
+          }
+        )
       }
     })
-
-    // first we get a management auth token if we are logged in
-    // this.auth.isAuthenticated$.subscribe((res: boolean) => {
-    //   // we are logged in
-    //   if (res) {
-    //       this.getManagementAuthToken();
-    //     }
-    //   }
-    // )
-
-
-
   }
 
   isDevMode(): boolean {
@@ -87,7 +81,7 @@ export class HomeComponent implements OnInit {
   getManagementAuthToken() {
     return this.sharedDataService.getManagementAuthToken().subscribe(
       (res) => {
-        this.sharedDataService.getUser('gonah3333', res.access_token).subscribe(
+        this.sharedDataService.getUser('gonah1234', res.access_token).subscribe(
           (res) => {
             console.log(res);
           }
