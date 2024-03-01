@@ -104,7 +104,6 @@ import {TermsAndConditionsComponent} from './components/terms-and-conditions/ter
       domain: environment.auth0Domain,
       clientId: environment.auth0ClientId,
       cacheLocation: 'localstorage',
-      useRefreshTokens: true,
       authorizationParams: {
         redirect_uri: window.location.origin,
         audience: `https://${environment.auth0Domain}/api/v2/`,
