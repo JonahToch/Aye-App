@@ -6,14 +6,14 @@
 
 
 <ng-container *ngIf="!loading">
-  <ng-container *ngIf="!userNotFound && ayeUser; else noUserFound">
+  <ng-container *ngIf="!userNotFound && profileUser; else noUserFound">
     <div style="display: flex; justify-content: center;margin:0;padding: 0;">
       <mat-card style="max-width: 850px;margin:0;padding: 0;width: 100%;">
         <mat-card-header style="width: 100%; padding: 0; margin-top: 8px;">
           <div style="justify-content: center; display: flex; width: 100%;">
             <mat-card-title style="width: 80%; max-width: 350px;justify-content: center; display: flex;">
 
-              <i><b style="font-size: 30px;overflow-wrap: anywhere">@{{ ayeUser.user_metadata.ayeUsername }}</b></i>
+              <i><b style="font-size: 30px;overflow-wrap: anywhere">@{{ profileUser.user_metadata.ayeUsername }}</b></i>
 
             </mat-card-title>
           </div>
@@ -22,8 +22,8 @@
 
 
         <br>
-        <ng-container *ngIf="ayeUser.user_metadata.profilePicUrl; else defaultImage">
-          <img mat-card-image src="{{ayeUser.user_metadata.profilePicUrl}}"
+        <ng-container *ngIf="profileUser.user_metadata.profilePicUrl; else defaultImage">
+          <img mat-card-image src="{{profileUser.user_metadata.profilePicUrl}}"
                (error)="handleImageError()"
                alt="Profile picture"
                style="border-radius: 5px; width: 95%; max-width: 750px; margin: 10px;">
@@ -43,16 +43,17 @@
         <mat-card-content>
           <ng-container *ngIf="editingBio; else showBio">
             <mat-form-field style="width: 100%;">
-              <mat-label>New Profile Picture: Enter in a URL to an image</mat-label>
+              <mat-label>Profile Picture URL</mat-label>
               <input matInput id="newProfilePicUrl" [ngModel]="newProfilePicUrl" (input)="changeProfilePic($event)">
+              <mat-hint>Enter in a URL to an image</mat-hint>
             </mat-form-field>
-
+            <br><br>
             <mat-form-field style="width: 100%;">
               <mat-label>Your Bio</mat-label>
               <textarea matInput rows="2" id="bio" style="font-family: 'Cascadia Code',serif; font-size: 16px;"
-                        [ngModel]="ayeUser.user_metadata.bio" (input)="changeBio($event)">
+                        [ngModel]="profileUser.user_metadata.bio" (input)="changeBio($event)">
               </textarea>
-              <button *ngIf="ayeUser.user_metadata.bio" matSuffix mat-icon-button aria-label="Clear"
+              <button *ngIf="profileUser.user_metadata.bio" matSuffix mat-icon-button aria-label="Clear"
                       (click)="this.editingBio = !this.editingBio;">
                 <mat-icon>close</mat-icon>
               </button>
@@ -61,10 +62,13 @@
 
           <ng-template #showBio>
         <span style="font-size: 16px;font-family: 'Cascadia Code',serif">
-        {{ ayeUser.user_metadata.bio }}<span
-          style="margin-left: 25px; border: 2px solid black;padding: 5px; border-radius: 10px;
+        {{ profileUser.user_metadata.bio }}
+
+          <ng-container *ngIf="onOwnProfilePage">
+          <span style="margin-left: 25px; border: 2px solid black;padding: 5px; border-radius: 10px;
                 background-color: rebeccapurple; font-size: 14px"
-          (click)="this.editingBio = !this.editingBio;">✏️</span>
+                (click)="this.editingBio = !this.editingBio;">✏️</span>
+            </ng-container>
       </span>
           </ng-template>
         </mat-card-content>
@@ -93,7 +97,7 @@
           </ng-container>
         </mat-card-actions>
         <mat-card-subtitle style="margin-left: 8px; margin-top: 5px;">Joined
-          on {{ toStandardDate(this.ayeUser!.created_at) }}
+          on {{ toStandardDate(this.profileUser!.created_at) }}
         </mat-card-subtitle>
       </mat-card>
     </div>

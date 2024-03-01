@@ -36,7 +36,9 @@ export class ProfileComponent implements OnInit {
   newBio: string = '';
 
   fullProfileUrl: string;
-  ayeUser: AyeUser | undefined;
+  usernameInUrl: string;
+  profileUser: AyeUser | undefined;
+  onOwnProfilePage = false;
 
   private profileList_: BehaviorSubject<any> = new BehaviorSubject(null);
   profileList$: Observable<any> = this.profileList_.asObservable();
@@ -52,13 +54,16 @@ export class ProfileComponent implements OnInit {
   ) {
     this.loading = true;
     this.fullProfileUrl = window.location.href;
+    this.usernameInUrl = this.router.url.substring(2, this.router.url.length)
     this.auth.isAuthenticated$.subscribe(
       (res) => {
         if (res) {
           this.sharedDataService.ayeUser$.subscribe(
             (res) => {
               if (res) {
-                this.ayeUser = res;
+                if (res.user_metadata.ayeUsername === this.usernameInUrl) {
+                  this.onOwnProfilePage = true;
+                }
               } else {
                 this.auth.user$
                   .pipe(
@@ -69,11 +74,12 @@ export class ProfileComponent implements OnInit {
                       )
                     ),
                     tap((ayeUser: any) => {
-                        this.setAyeUser(ayeUser);
+                        if (ayeUser.user_metadata.ayeUsername === this.usernameInUrl) {
+                          this.setAyeUser(ayeUser);
+                        }
                       }
                     )
-                  )
-                  .subscribe();
+                  ).subscribe();
               }
             },
             (error) => {
@@ -91,12 +97,9 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.routerSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      console.log(event.url.substring(2, event.url.length));
-      console.log(this.profileUsername)
       if (this.profileUsername !== event.url.substring(2, event.url.length)) {
         window.location.reload();
       }
@@ -105,7 +108,7 @@ export class ProfileComponent implements OnInit {
     if (this.router.url.substring(0, 2) !== '/@') {
       this.router.navigate(['/']).then();
     }
-    this.profileUsername = this.router.url.substring(2, this.router.url.length);
+    this.profileUsername = this.usernameInUrl;
     this.getManagementAuthToken();
   }
 
@@ -115,7 +118,7 @@ export class ProfileComponent implements OnInit {
 
   handleImageError() {
     this.invalidImageError = true;
-    this.ayeUser!.user_metadata.profilePicUrl = '/assets/images/goblin-silhouette.png';
+    this.profileUser!.user_metadata.profilePicUrl = '/assets/images/goblin-silhouette.png';
   }
 
   changeBio(event: any) {
@@ -129,38 +132,21 @@ export class ProfileComponent implements OnInit {
     this.profileChangesMade = true;
   }
 
-  openQRCodeDialog(): void {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.restoreFocus = false;
-    dialogConfig.autoFocus = true;
-    dialogConfig.maxWidth = "550px";
-    dialogConfig.width = "95%"
-
-    this.dialog.open(QrCodeComponent, dialogConfig);
-  }
 
   updateProfile(userId: string | undefined, authToken: string | undefined) {
     if (this.newBio) {
-      this.ayeUser!.user_metadata!.bio = this.newBio;
+      this.profileUser!.user_metadata!.bio = this.newBio;
     }
     if (this.newProfilePicUrl) {
-      this.ayeUser!.user_metadata!.profilePicUrl = this.newProfilePicUrl;
+      this.profileUser!.user_metadata!.profilePicUrl = this.newProfilePicUrl;
     }
 
-    this.profileService.updateUserMetadata(this.ayeUser, userId, authToken);
+    this.profileService.updateUserMetadata(this.profileUser, userId, authToken);
 
     this.editingBio = false;
     this.profileChangesMade = false;
   }
 
-  redirectToHome() {
-    this.router.navigate(['/']).then();
-  }
-
-  toStandardDate(date: Date): string {
-    return this.dateService.toStandardDate(date);
-  }
 
   getManagementAuthToken() {
     return this.sharedDataService.getManagementAuthToken().subscribe(
@@ -171,7 +157,7 @@ export class ProfileComponent implements OnInit {
             if (res.length === 0) {
               this.userNotFound = true;
             } else {
-              this.ayeUser = res[0];
+              this.profileUser = res[0];
             }
           },
           (error): void => {
@@ -184,5 +170,25 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+
+  openQRCodeDialog(): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.restoreFocus = false;
+    dialogConfig.autoFocus = true;
+    dialogConfig.maxWidth = "550px";
+    dialogConfig.width = "95%"
+
+    this.dialog.open(QrCodeComponent, dialogConfig);
+  }
+
+  redirectToHome() {
+    this.router.navigate(['/']).then();
+  }
+
+  toStandardDate(date: Date): string {
+    return this.dateService.toStandardDate(date);
+  }
+
 
 }

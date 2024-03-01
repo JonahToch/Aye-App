@@ -33,7 +33,8 @@ export class ProfileService {
 
     const body = {
       user_metadata: {
-        "bio": 'test123',
+        "bio": ayeUser?.user_metadata.bio,
+        "profilePicUrl": ayeUser?.user_metadata.profilePicUrl,
       }
     }
 
