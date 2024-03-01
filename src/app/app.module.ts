@@ -37,20 +37,22 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AuthHttpInterceptor} from '@auth0/auth0-angular';
 import {NgOptimizedImage} from "@angular/common";
-import { SoftballComponent } from './softball/softball.component';
+import {SoftballComponent} from './softball/softball.component';
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import {CsvModule} from "@ctrl/ngx-csv";
-import { StatExplanationComponent } from './dialogs/stat-explanation/stat-explanation.component';
+import {StatExplanationComponent} from './dialogs/stat-explanation/stat-explanation.component';
 import {MatSortModule} from "@angular/material/sort";
-import { LocationExplanationComponent } from './dialogs/location-explanation/location-explanation/location-explanation.component';
-import { UsMapModule } from 'angular-us-map';
-import { UnitedStatesMapComponent } from './united-states-map/united-states-map.component';
+import {
+  LocationExplanationComponent
+} from './dialogs/location-explanation/location-explanation/location-explanation.component';
+import {UsMapModule} from 'angular-us-map';
+import {UnitedStatesMapComponent} from './united-states-map/united-states-map.component';
 import {QRCodeModule} from "angularx-qrcode";
-import { QrCodeComponent } from './dialogs/qr-code/qr-code/qr-code.component';
-import { SesameComponent } from './components/sesame/sesame.component';
-import { PrivacyComponent } from './components/privacy/privacy.component';
-import { TermsAndConditionsComponent } from './components/terms-and-conditions/terms-and-conditions.component';
+import {QrCodeComponent} from './dialogs/qr-code/qr-code/qr-code.component';
+import {SesameComponent} from './components/sesame/sesame.component';
+import {PrivacyComponent} from './components/privacy/privacy.component';
+import {TermsAndConditionsComponent} from './components/terms-and-conditions/terms-and-conditions.component';
 
 
 @NgModule({
@@ -106,7 +108,7 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
       authorizationParams: {
         redirect_uri: window.location.origin,
         audience: `https://${environment.auth0Domain}/api/v2/`,
-        scope: 'openid profile update:current_user_metadata offline_access read:current_user create:current_user_metadata delete:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials read:users',
+        scope: 'openid profile create:current_user_metadata update:current_user_metadata delete:current_user_metadata read:current_user read:users',
       },
 
       httpInterceptor: {
@@ -119,7 +121,7 @@ import { TermsAndConditionsComponent } from './components/terms-and-conditions/t
                 audience: `https://${environment.auth0Domain}/api/v2/`,
 
                 // The attached token should have these scopes
-                scope: 'openid profile update:current_user_metadata offline_access read:current_user create:current_user_metadata delete:current_user_metadata create:current_user_device_credentials delete:current_user_device_credentials read:users'
+                scope: 'openid profile create:current_user_metadata update:current_user_metadata delete:current_user_metadata read:current_user read:users'
               }
             }
           }]

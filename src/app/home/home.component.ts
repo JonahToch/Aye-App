@@ -63,6 +63,7 @@ export class HomeComponent implements OnInit {
         this.auth.isAuthenticated$.subscribe((res: boolean) => {
             if (res) {
               this.getManagementAuthToken();
+              this.auth.getAccessTokenSilently();
             }
           }
         )
