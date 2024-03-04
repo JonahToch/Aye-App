@@ -62,6 +62,27 @@ export class ProfileService {
     );
   }
 
+  createUsername(ayeUser: AyeUser | undefined, userId: string | undefined, authToken: string | undefined): Observable<any> {
+    const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/' + userId
+
+    const body = {
+      user_metadata: {
+        "ayeUsername": ayeUser?.user_metadata.ayeUsername,
+        "bio": '',
+        "profilePicUrl": '',
+      }
+    }
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken,
+        },
+      )
+    };
+    return this.http.patch<any>(url, body, httpOptions);
+  }
+
   getAllUsers(userId: string | undefined, authToken: string | undefined): Observable<any> {
     const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users?q=email%3A%22jane%40exampleco.com%22&search_engine=v3'
     console.log(userId, authToken);
@@ -92,10 +113,6 @@ export class ProfileService {
     return this.http.get<Observable<any>>(url, httpOptions);
     // console.log('after');
   }
-
-
-
-
 
 
 }

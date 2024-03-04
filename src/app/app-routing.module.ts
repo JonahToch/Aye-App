@@ -10,6 +10,7 @@ import {SoftballComponent} from "./softball/softball.component";
 import {SesameComponent} from "./components/sesame/sesame.component";
 import {PrivacyComponent} from "./components/privacy/privacy.component";
 import {TermsAndConditionsComponent} from "./components/terms-and-conditions/terms-and-conditions.component";
+import {UsernameSelectionComponent} from "./components/username-selection/username-selection.component";
 
 const routes: Routes = [
 
@@ -32,6 +33,10 @@ const routes: Routes = [
   { path: 'sesame',
     component: SesameComponent,
     title: "Aye - Sesame"
+  },
+  { path: 'username-selection',
+    component: UsernameSelectionComponent,
+    title: "Aye - Username Selection"
   },
   { path: 'poop-form',
     component: PoopFormComponent,

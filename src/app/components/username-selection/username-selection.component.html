@@ -1,0 +1,95 @@
+<div style="display: flex;justify-content: center; align-items: center;">
+
+  <mat-card appearance="outlined" style="width: 100%;">
+
+    <ng-container *ngIf="!usernameChosen else usernameAssigned">
+
+
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+
+        <h1>Welcome to Aye App</h1>
+      </div>
+
+
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+        <h2>Create your username.
+
+
+        </h2>
+      </div>
+
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+        <h3>Choose wisely as you cannot change your username.
+
+
+        </h3>
+      </div>
+
+
+      <div style="display: flex;justify-content: center;">
+
+
+        <form style="width: 90%" [formGroup]="usernameForm" (ngSubmit)="submitForm()">
+          <br>
+          <mat-form-field style="width: 100%;">
+            <mat-label>Username</mat-label>
+            <input matInput id="username" formControlName="username" [maxlength]="20" [minlength]="1"
+                   (input)="userTyping()">
+            <mat-error *ngIf="usernameForm.get('username')!.invalid">
+            <span
+              *ngIf="usernameForm.get('username')!.hasError('minlength')">Username must be at least {{ minUsernameLength }}
+              characters</span>
+              <span
+                *ngIf="usernameForm.get('username')!.hasError('maxlength')">Username cannot exceed {{ maxUsernameLength }}
+                characters</span>
+              <span *ngIf="usernameForm.get('username')!.hasError('pattern')">Invalid characters in username</span>
+            </mat-error>
+          </mat-form-field>
+          <mat-hint>
+            Username can only contain letters, numbers, "-" , and "_"
+          </mat-hint>
+          <mat-error *ngIf="this.usernameTaken">
+
+
+            <br> <br>
+            <b> Sorry, that username is already taken. Enter a different one.
+            </b>
+          </mat-error>
+          <br> <br>
+          <div style="display: flex;justify-content: right; align-items: center;">
+
+            <button mat-raised-button [disabled]="usernameForm.invalid || hasWhiteSpace() || isUsernameTaken()"
+                    type="submit" color="primary"
+                    style="font-family: serif; width: 80%; margin-right: 10%;  font-size: 19px;  margin-bottom: 20px;">
+              <b>Submit</b></button>
+          </div>
+        </form>
+
+      </div>
+      <br>
+    </ng-container>
+
+    <ng-template #usernameAssigned>
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+
+        <h1>You have successfully got the username <span
+          style="color: #3366FF; font-weight: bold">{{ this.usernameForm.get!('username')?.value }}</span>🎉</h1>
+      </div>
+
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+
+        <h2>Now complete your profile by creating a bio, selecting a profile picture, and more😊</h2>
+      </div>
+
+      <div style="display: flex;justify-content: center; margin-left: 5%; margin-right: 5%">
+
+        <button mat-raised-button (click)="goToProfile()"
+                type="submit" color="accent"
+                style="font-family: serif; width: 80%; margin-right: 10%;  font-size: 19px;  margin-bottom: 20px;">
+          <b>Your profile</b></button>
+      </div>
+
+    </ng-template>
+
+  </mat-card>
+</div>

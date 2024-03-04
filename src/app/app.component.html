@@ -19,36 +19,25 @@
     </ng-template>
 
     <ng-container *ngIf="isDevMode()">
-    <ng-container *ngIf="auth.isAuthenticated$ | async;">
-
-<!--      <ng-container *ngIf="auth.idTokenClaims$ | async as token">-->
-<!--        {{token.sub_jwk}}-->
-<!--        {{token.__raw}}-->
-<!--      </ng-container>-->
-
-
-      <ng-container *ngIf="auth.user$ | async as user">
-
-        <span class="example-spacer"></span>
-        <!--        {{user.nickname}}-->
-        <!--        {{auth.idTokenClaims$}}-->
-        <!--        {{user.preferred_username}}-->
-<!--        <a [routerLink]="['/profile/' + user.profile]">-->
-          <ng-container *ngIf="ayeUser$ | async as username">
-          <button mat-icon-button aria-label="profile" role="button"
-                  matTooltip="Your profile" routerLink="/@{{username.user_metadata.ayeUsername}}">
-            <mat-icon>child_care</mat-icon>
-          </button>
+      <ng-container *ngIf="auth.isAuthenticated$ | async;">
+        <ng-container *ngIf="auth.user$ | async as authUser">
+          <span class="example-spacer"></span>
+          <ng-container *ngIf="ayeUser$ | async as user">
+            <ng-container *ngIf="user.user_metadata && user.user_metadata.ayeUsername">
+              <button mat-icon-button aria-label="profile" role="button"
+                      matTooltip="Your profile" routerLink="/@{{user.user_metadata.ayeUsername}}">
+                <mat-icon>child_care</mat-icon>
+              </button>
+            </ng-container>
           </ng-container>
-<!--        </a>-->
-        <button mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })"
-                matTooltip="Log out"
-                aria-label="profile"
-                role="button">
-          <mat-icon>logout</mat-icon>
-        </button>
+          <button mat-icon-button (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })"
+                  matTooltip="Log out"
+                  aria-label="profile"
+                  role="button">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </ng-container>
       </ng-container>
-    </ng-container>
     </ng-container>
   </mat-toolbar>
 
@@ -80,6 +69,6 @@
 
   <div class="footer">
     <span style="float: left;">𝐆𝐨𝐧𝐚𝐡 𝐒𝐨𝐟𝐭𝐰𝐚𝐫𝐞 </span>
-    <span style="float: right; font-weight: lighter">{{this.version}}</span>
+    <span style="float: right; font-weight: lighter">{{ this.version }}</span>
   </div>
 </div>

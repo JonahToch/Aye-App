@@ -53,6 +53,7 @@ import {QrCodeComponent} from './dialogs/qr-code/qr-code/qr-code.component';
 import {SesameComponent} from './components/sesame/sesame.component';
 import {PrivacyComponent} from './components/privacy/privacy.component';
 import {TermsAndConditionsComponent} from './components/terms-and-conditions/terms-and-conditions.component';
+import { UsernameSelectionComponent } from './components/username-selection/username-selection.component';
 
 
 @NgModule({
@@ -77,7 +78,8 @@ import {TermsAndConditionsComponent} from './components/terms-and-conditions/ter
     QrCodeComponent,
     SesameComponent,
     PrivacyComponent,
-    TermsAndConditionsComponent
+    TermsAndConditionsComponent,
+    UsernameSelectionComponent
   ],
   imports: [
     BrowserModule,

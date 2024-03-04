@@ -16,6 +16,8 @@ import {AyeUser} from "../interfaces/aye-user";
 })
 export class HomeComponent implements OnInit {
 
+  ayeUser: AyeUser | undefined;
+
   constructor(
     private router: Router,
     private poopService: PoopService,
@@ -30,7 +32,11 @@ export class HomeComponent implements OnInit {
         this.sharedDataService.ayeUser$.subscribe(
           (res) => {
             if (res) {
-
+              this.ayeUser = res;
+              if (res.user_metadata === undefined || res.user_metadata.ayeUsername === undefined
+                || !res.user_metadata.ayeUsername) {
+                this.router.navigate(['/username-selection']).then();
+              }
             } else {
               this.auth.user$
                 .pipe(
@@ -41,7 +47,9 @@ export class HomeComponent implements OnInit {
                     )
                   ),
                   tap((ayeUser: any) => {
+                      console.log(ayeUser);
                       this.setAyeUser(ayeUser);
+                      this.ayeUser = res;
                     }
                   )
                 )
@@ -82,9 +90,8 @@ export class HomeComponent implements OnInit {
   getManagementAuthToken() {
     return this.sharedDataService.getManagementAuthToken().subscribe(
       (res) => {
-        this.sharedDataService.getUser('gonah1234', res.access_token).subscribe(
+        this.sharedDataService.getUser(this.ayeUser!.user_metadata.ayeUsername, res.access_token).subscribe(
           (res) => {
-            console.log(res);
           }
         )
       }
