@@ -54,9 +54,11 @@ export class UsernameSelectionComponent {
                     )
                   ),
                   tap((ayeUser: any) => {
-                      console.log(ayeUser);
                       this.setAyeUser(ayeUser);
                       this.ayeUser = ayeUser;
+                      if (this.ayeUser?.user_metadata.ayeUsername) {
+                        this.router.navigate(['/']).then();
+                      }
                     }
                   )
                 )

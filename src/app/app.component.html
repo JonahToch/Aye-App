@@ -23,9 +23,9 @@
         <ng-container *ngIf="auth.user$ | async as authUser">
           <span class="example-spacer"></span>
           <ng-container *ngIf="ayeUser$ | async as user">
-            <ng-container *ngIf="user.user_metadata && user.user_metadata.ayeUsername">
+            <ng-container *ngIf="(user.user_metadata && user.user_metadata.ayeUsername)">
               <button mat-icon-button aria-label="profile" role="button"
-                      matTooltip="Your profile" routerLink="/@{{user.user_metadata.ayeUsername}}">
+                      matTooltip="Your profile" routerLink="/@{{user['user_metadata'].ayeUsername}}">
                 <mat-icon>child_care</mat-icon>
               </button>
             </ng-container>
@@ -57,6 +57,23 @@
           <b>📓<span style="margin-left: 5px;">Poop Diaries</span></b>
           <!--          <button mat-button mat-small class="badge-button" style="background-color: #3366ff"><b>NEW UPDATE😮</b></button>-->
         </a>
+
+          <ng-container *ngIf="auth.isAuthenticated$ | async;">
+            <ng-container *ngIf="auth.user$ | async as authUser">
+              <span class="example-spacer"></span>
+              <ng-container *ngIf="ayeUser$ | async as user">
+                <ng-container *ngIf="(user.user_metadata && user.user_metadata.ayeUsername)">
+                  <a mat-list-item routerLink="/@{{user['user_metadata'].ayeUsername}}" (click)="snav.toggle()">
+                    <b><mat-icon>child_care</mat-icon><span style="margin-left: 5px;">Your Profile</span></b>
+                  </a>
+
+                </ng-container>
+              </ng-container>
+
+            </ng-container>
+          </ng-container>
+
+
       </mat-nav-list>
     </mat-sidenav>
 

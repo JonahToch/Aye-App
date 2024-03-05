@@ -54,14 +54,14 @@ export class ProfileComponent implements OnInit {
   ) {
     this.loading = true;
     this.fullProfileUrl = window.location.href;
-    this.usernameInUrl = this.router.url.substring(2, this.router.url.length)
+    this.usernameInUrl = this.router.url.substring(2, this.router.url.length);
     this.auth.isAuthenticated$.subscribe(
       (res) => {
         if (res) {
           this.sharedDataService.ayeUser$.subscribe(
             (res) => {
               if (res) {
-                if (res.user_metadata.ayeUsername === this.usernameInUrl) {
+                if (res.user_metadata.ayeUsername.toLowerCase() === this.usernameInUrl.toLowerCase()) {
                   this.onOwnProfilePage = true;
                 }
               } else {
@@ -74,9 +74,7 @@ export class ProfileComponent implements OnInit {
                       )
                     ),
                     tap((ayeUser: any) => {
-                        if (ayeUser.user_metadata.ayeUsername === this.usernameInUrl) {
-                          this.setAyeUser(ayeUser);
-                        }
+                        this.setAyeUser(ayeUser);
                       }
                     )
                   ).subscribe();
@@ -153,11 +151,10 @@ export class ProfileComponent implements OnInit {
       (res): void => {
         this.sharedDataService.getUser(this.profileUsername, res.access_token).subscribe(
           (res): void => {
-            console.log(res); // wonah
             if (res.length === 0) {
               this.userNotFound = true;
             } else {
-              this.profileUser = res[0];
+              this.profileUser = res;
             }
           },
           (error): void => {

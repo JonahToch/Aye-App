@@ -83,16 +83,19 @@
                   matTooltip="Tap to copy to your clipboard"
                   aria-label="Show tooltip on the button at the end of this section">Share
           </button>
-          <ng-container *ngIf="auth.user$ | async as user;">
-            <ng-container *ngIf="auth.idTokenClaims$ | async as token;">
-              <button mat-stroked-button
-                      (click)="updateProfile(user.sub, token.__raw)"
-                      style=" width: 40%; margin-right: 8%; margin-left: 2%;"
-                      [disabled]="!profileChangesMade"
-                      #tooltip="matTooltip"
-                      matTooltip="Tap to save your changes"
-                      aria-label="Show tooltip on the button at the end of this section">Save Changes
-              </button>
+          <ng-container *ngIf="onOwnProfilePage">
+
+            <ng-container *ngIf="auth.user$ | async as user;">
+              <ng-container *ngIf="auth.idTokenClaims$ | async as token;">
+                <button mat-stroked-button
+                        (click)="updateProfile(user.sub, token.__raw)"
+                        style=" width: 40%; margin-right: 8%; margin-left: 2%;"
+                        [disabled]="!profileChangesMade"
+                        #tooltip="matTooltip"
+                        matTooltip="Tap to save your changes"
+                        aria-label="Show tooltip on the button at the end of this section">Save Changes
+                </button>
+              </ng-container>
             </ng-container>
           </ng-container>
         </mat-card-actions>
