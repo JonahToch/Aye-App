@@ -1,5 +1,6 @@
 export class Poop {
   public _id: string;
+  public userId: string;
   public name: string;
   public description: string;
   public rating: number;
@@ -12,8 +13,9 @@ export class Poop {
   public comments: CommentJ[];
 
 
-  constructor(_id: string, name: string, description: string, rating: number, date: Date, fullAddr: string, city: string, longState: string, likes: number, dislikes: number, comments: CommentJ) {
+  constructor(_id: string, userId: string, name: string, description: string, rating: number, date: Date, fullAddr: string, city: string, longState: string, likes: number, dislikes: number, comments: CommentJ) {
     this._id = _id;
+    this.userId = userId;
     this.name = name;
     this.description = description;
     this.rating = rating;
@@ -25,6 +27,7 @@ export class Poop {
     this.dislikes = dislikes;
     this.comments = [{
       _id: comments._id,
+      userId: userId,
       user: comments.user,
       text: comments.text,
       date: comments.date,
@@ -39,6 +42,7 @@ export class Poop {
 
 export interface CommentJ {
   _id: string;
+  userId: string;
   user: string;
   text: string;
   date: Date;
@@ -50,6 +54,7 @@ export interface CommentJ {
 
 export interface Replies {
   _id: string;
+  userId: string;
   user: string;
   text: string;
   date: Date;

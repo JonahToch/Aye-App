@@ -1,10 +1,14 @@
 import {AfterContentInit, AfterViewInit, Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Poop} from "../models/poop";
-import {isEmpty, Observable, Subscription} from "rxjs";
+import {concatMap, isEmpty, Observable, of, Subscription, tap} from "rxjs";
 import {PoopService} from "../services/poop.service";
 import {UntypedFormBuilder} from "@angular/forms";
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {AuthService} from "@auth0/auth0-angular";
+import {SharedDataService} from "../services/shared-data.service";
+import {AyeUser} from "../interfaces/aye-user";
+import {environment} from "../../environments/environment.prod";
 
 
 @Component({
@@ -24,29 +28,69 @@ export class PoopDiariesComponent implements OnInit {
   addReplyCommentName = '';
   addReplyCommentText = '';
   entriesToShow = 5;
+  ayeUser: AyeUser | undefined;
+  isLoggedIn = false;
+  token: any;
 
   formData = this.formBuilder.group({
     name: '',
     comment: '',
-  })
+  });
 
   replyFormData = this.formBuilder.group({
     replyName: '',
     replyComment: '',
-  })
+  });
 
 
   constructor(
     private http: HttpClient,
     private poopService: PoopService,
     private formBuilder: UntypedFormBuilder,
+    public auth: AuthService,
+    private sharedDataService: SharedDataService,
   ) {
     this.addCommentDate = new Date();
     this.addReplyCommentDate = new Date();
-    this.isLoadedContentSubscription = this.poopService.poopLoaded$.subscribe((v) => {
+    this.getManagementAuthToken();
+      this.isLoadedContentSubscription = this.poopService.poopLoaded$.subscribe((v) => {
       console.log(v);
       this.isContentLoaded = v;
     });
+    this.auth.isAuthenticated$.subscribe(
+      (res) => {
+        this.isLoggedIn = res;
+        if (res) {
+          this.sharedDataService.ayeUser$.subscribe(
+            (res) => {
+              if (res) {
+                this.ayeUser = res;
+                console.log(res);
+              } else {
+                this.auth.user$
+                  .pipe(
+                    concatMap((user: any) =>
+                      this.http.get(
+                        // @ts-ignore
+                        encodeURI(`https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/${user.sub}`)
+                      )
+                    ),
+                    tap((ayeUser: any) => {
+                        this.ayeUser = res;
+                        this.setAyeUser(ayeUser);
+                      }
+                    )
+                  ).subscribe();
+              }
+            },
+            (error) => {
+              console.log(error);
+            },
+          )
+        }
+      }
+    )
+    // this.ayeUser = this.sharedDataService.ayeUser_.getValue();
   }
 
   ngOnInit(): void {
@@ -54,10 +98,28 @@ export class PoopDiariesComponent implements OnInit {
     this.poops$ = this.poopService.getPoops();
   }
 
-  showMoreEntries() {
+
+  getManagementAuthToken() {
+    return this.sharedDataService.getManagementAuthToken().subscribe(
+      (res): void => {
+        this.token = res;
+      }
+    )
+  }
+
+  getUser(userId: string, managementAuthToken: string): Observable<AyeUser> {
+    return this.sharedDataService.getUserById(userId, managementAuthToken);
+  }
+
+
+  showMoreEntries()
+  {
     this.entriesToShow += 15;
   }
 
+  setAyeUser(ayeUser: AyeUser) {
+    this.sharedDataService.setUser(ayeUser)
+  }
 
   addCommentRating(id: string, likes: number, dislikes: number) {
     this.poopService.addCommentRating(id, likes, dislikes);

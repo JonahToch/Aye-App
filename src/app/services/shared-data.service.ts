@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, of} from "rxjs";
 import {Poop} from "../models/poop";
 import {environment} from "../../environments/environment.prod";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -15,6 +15,8 @@ export class SharedDataService {
 
   private ayeUser_: BehaviorSubject<AyeUser | undefined> = new BehaviorSubject<AyeUser | undefined>(undefined);
   ayeUser$: Observable<AyeUser | undefined> = this.ayeUser_.asObservable();
+
+  private userCache: Map<string, any> = new Map();
 
   constructor(
     private http: HttpClient,
@@ -52,6 +54,38 @@ export class SharedDataService {
     return this.http.get(url).pipe((res) => {
       return res;
     });
+  }
+
+  getUserById(userId: string, managementAuthToken: string) {
+
+   const cacheKey = userId;
+
+    if (this.userCache.has(cacheKey)) {
+      console.log(this.userCache.get(cacheKey))
+      return of(this.userCache.get(cacheKey));
+    }
+    const url: string = `${environment.mainApiUrl}/users?type=isUsernameUnique&username=` + 'jonah' + `&token=` + managementAuthToken;
+    // const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/auth0%7C65e174d4a54d24662c0b9725';
+    const httpOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + managementAuthToken,
+        },
+      )
+    };
+    console.log('we calling with' + userId);
+    return this.http.get(url, httpOptions).pipe(
+      map(data => {
+        // Store data in cache
+        this.userCache.set(userId, data);
+        return data;
+      }),
+      catchError(error => {
+        // Handle error gracefully
+        console.error('Error fetching user data:', error);
+        this.userCache.set(userId, null);
+        return of(null);
+      }))
   }
 
   setUser(ayeUser: AyeUser) {

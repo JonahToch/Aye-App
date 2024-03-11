@@ -7,9 +7,12 @@ import {UntypedFormBuilder} from "@angular/forms";
 import {PoopService} from "../services/poop.service";
 import {LocationService} from "../services/location.service";
 import {Location} from "../models/location";
-import {Observable} from "rxjs";
+import {concatMap, Observable, tap} from "rxjs";
 import {googleInterface} from "../models/google-interface";
 import {keyframes} from "@angular/animations";
+import {AuthService} from "@auth0/auth0-angular";
+import {SharedDataService} from "../services/shared-data.service";
+import {AyeUser} from "../interfaces/aye-user";
 
 @Component({
   selector: 'app-poop-form',
@@ -24,6 +27,8 @@ export class PoopFormComponent implements OnInit {
   unknownError = false;
   isTextLoaded = false;
   helpText = "";
+  isLoggedIn = false;
+  ayeUser: AyeUser | undefined;
 
   public poopLocation!: googleInterface;
 
@@ -39,15 +44,52 @@ export class PoopFormComponent implements OnInit {
     private http: HttpClient,
     private formBuilder: UntypedFormBuilder,
     private poopService: PoopService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    public auth: AuthService,
+    private sharedDataService: SharedDataService,
   ) {
     this.buttonText = 'Submit';
     this.generateRandomHelpText();
+    this.auth.isAuthenticated$.subscribe(
+      (res) => {
+        this.isLoggedIn = res;
+        if (res) {
+          this.sharedDataService.ayeUser$.subscribe(
+            (res) => {
+              if (res) {
+                this.ayeUser = res;
+              } else {
+                this.auth.user$
+                  .pipe(
+                    concatMap((user: any) =>
+                      this.http.get(
+                        // @ts-ignore
+                        encodeURI(`https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/${user.sub}`)
+                      )
+                    ),
+                    tap((ayeUser: any) => {
+                        this.ayeUser = res;
+                        this.setAyeUser(ayeUser);
+                      }
+                    )
+                  ).subscribe();
+              }
+            },
+            (error) => {
+              console.log(error);
+            },
+          )
+        }
+      }
+    )
   }
 
   ngOnInit(): void {
   }
 
+  setAyeUser(ayeUser: AyeUser) {
+    this.sharedDataService.setUser(ayeUser)
+  }
 
   generateRandomHelpText(): void {
     const randomVal = Math.random() * 100;
@@ -95,30 +137,23 @@ export class PoopFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    let name = this.formData.get('name')?.value;
+    let userId = this.ayeUser?.user_id || '';
     let description = this.formData.get('description')?.value;
     let rating = this.formData.get('rating')?.value;
     let date = new Date();
-
-    // console.log(date);
-    if (name == '') {
-      name = 'Guest'
-    }
-
-    if (description == '') {
-      description = 'speechless'
-    }
 
     if (rating == '') {
       rating = 0;
     }
 
+    console.log(this.ayeUser)
+    console.log(userId);
     if (this.poopLocation) {
-      this.poopService.addPoops(name, description, rating, date, this.poopLocation.fullAddr, this.poopLocation.longitude,
+      this.poopService.addPoops(userId, description, rating, date, this.poopLocation.fullAddr, this.poopLocation.longitude,
         this.poopLocation.latitude, this.poopLocation.street, this.poopLocation.city, this.poopLocation.longState,
         this.poopLocation.country, this.poopLocation.zipcode);
     } else {
-      this.poopService.addPoops(name, description, rating, date);
+      this.poopService.addPoops(userId, description, rating, date);
     }
     this.loading = true;
     this.buttonText = 'Submitting...';

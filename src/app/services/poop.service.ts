@@ -24,10 +24,10 @@ export class PoopService {
     const url = `${environment.mainApiUrl}/poop/list-all`;
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://jonahtoch.com',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://jonahtoch.com',
         },
-        )
+      )
     };
     return this.http.get<Poop[]>(url, httpOptions)
       .pipe(map(res => {
@@ -41,12 +41,13 @@ export class PoopService {
       );
   }
 
-  addPoops(name: string, description: string, rating: number, date: Date, fullAddr?: string,
+  addPoops(userId: string, description: string, rating: number, date: Date, fullAddr?: string,
            lng?: string, lat?: string, street?: string, city?: string, longState?: string,
            country?: string, zipcode?: string): void {
     const url = `${environment.mainApiUrl}/poop/create`;
     const body = {
-      name: name, description: description, rating: rating, date: date, fullAddr: fullAddr, longitude: lng,
+      userId: userId,
+      description: description, rating: rating, date: date, fullAddr: fullAddr, longitude: lng,
       latitude: lat, street: street, city: city, longState: longState, country: country, zipcode: zipcode
     };
     console.log('sending request with this data ' + body);
@@ -109,8 +110,10 @@ export class PoopService {
   checkOnline() {
     const url = `${environment.mainApiUrl}/poop/list-all`;
     const httpOptions = {
-      headers: new HttpHeaders({'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://jonahtoch.com'})
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://jonahtoch.com'
+      })
     };
     return this.http.get(url, httpOptions).pipe(
       catchError(this.handleError<boolean>('isOnline', false)))
