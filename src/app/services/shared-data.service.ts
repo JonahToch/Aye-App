@@ -63,7 +63,7 @@ export class SharedDataService {
     if (this.userCache.has(cacheKey)) {
       return of(this.userCache.get(cacheKey));
     }
-    const url: string = `${environment.mainApiUrl}/users?type=isUsernameUnique&username=` + 'jonah' + `&token=` + managementAuthToken;
+    const url: string = `${environment.mainApiUrl}/users2?type=getUserById&userId=` + userId + `&token=` + managementAuthToken;
     // const url = 'https://dev-mn6falogt3c14mat.us.auth0.com/api/v2/users/auth0%7C65e174d4a54d24662c0b9725';
     const httpOptions = {
       headers: new HttpHeaders({
