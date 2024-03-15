@@ -66,8 +66,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params: Params): void => {
-      if (params['dev'] === 'true') {
-        this.sharedDataService.isDevMode = 'true';
+      // if (params['dev'] === 'true') {
+      //   this.sharedDataService.isDevMode = 'true';
         this.auth.isAuthenticated$.subscribe((res: boolean) => {
             if (res) {
               this.getManagementAuthToken();
@@ -75,7 +75,7 @@ export class HomeComponent implements OnInit {
             }
           }
         )
-      }
+      // }
     })
   }
 

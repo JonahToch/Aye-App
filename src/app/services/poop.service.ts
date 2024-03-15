@@ -83,10 +83,10 @@ export class PoopService {
     );
   }
 
-  addComment(_id: string, user: string, text: string, date: Date): void {
+  submitComment(_id: string, userId: string, text: string, date: Date): void {
     const url = `${environment.mainApiUrl}/poop/add-comment`;
-    const body = {_id: _id, user: user, text: text, date: date};
-    console.log('sending request with this data ' + body.text + "/" + body._id + "/" + body.user + "/" + body.date);
+    const body = {_id: _id, userId: userId, text: text, date: date};
+    // console.log('sending request with this data ' + body.text + "/" + body._id + "/" + body.userId + "/" + body.date);
     const httpOptions = {
       headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
     };
@@ -95,9 +95,9 @@ export class PoopService {
     );
   }
 
-  addCommentReply(poop_id: string, comment_id: string, user: string, text: string, date: Date): void {
+  submitCommentReply(poop_id: string, comment_id: string, userId: string, text: string, date: Date): void {
     const url = `${environment.mainApiUrl}/poop/add-comment-reply`;
-    const body = {poop_id, comment_id, user, text, date};
+    const body = {poop_id, comment_id, userId: userId, text, date};
     console.log('sending request with this data ' + body);
     const httpOptions = {
       headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})

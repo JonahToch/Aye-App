@@ -114,6 +114,9 @@ export class LeaderboardsComponent implements AfterViewInit {
       map((poops) => {
         if (poops) {
           poops.forEach((poop: Poop) => {
+            if (!poop.name) {
+              return;
+            }
             // Algorithm
             // pts per char of description is 1pt, max 300.
             // pts per giving addr is 100 if give, 250 if not in illinois, 0 if not.

@@ -61,7 +61,6 @@ export class SharedDataService {
    const cacheKey = userId;
 
     if (this.userCache.has(cacheKey)) {
-      console.log(this.userCache.get(cacheKey))
       return of(this.userCache.get(cacheKey));
     }
     const url: string = `${environment.mainApiUrl}/users?type=isUsernameUnique&username=` + 'jonah' + `&token=` + managementAuthToken;
@@ -73,7 +72,6 @@ export class SharedDataService {
         },
       )
     };
-    console.log('we calling with' + userId);
     return this.http.get(url, httpOptions).pipe(
       map(data => {
         // Store data in cache

@@ -22,10 +22,9 @@ export class PoopDiariesComponent implements OnInit {
   isContentLoaded = false;
   poops$!: Observable<Poop[]>;
   addCommentDate: Date;
-  addCommentName = '';
+  addCommentUserId = '';
   addCommentText = '';
   addReplyCommentDate: Date;
-  addReplyCommentName = '';
   addReplyCommentText = '';
   entriesToShow = 5;
   ayeUser: AyeUser | undefined;
@@ -125,31 +124,25 @@ export class PoopDiariesComponent implements OnInit {
     this.poopService.addCommentRating(id, likes, dislikes);
   }
 
-  addCommentReply(poop_id: string, comment_id: string) {
+  addCommentReply(poop_id: string, comment_id: string, userId: string) {
     const currDate = new Date();
-    let user = this.replyFormData.get('replyName')?.value;
     const comment = this.replyFormData.get('replyComment')?.value;
-    if (user === '') {
-      user = 'Guest';
-    }
+
     this.addReplyCommentDate = currDate;
-    this.addReplyCommentName = user;
     this.addReplyCommentText = comment;
-    this.poopService.addCommentReply(poop_id, comment_id, user, comment, currDate);
+    this.poopService.submitCommentReply(poop_id, comment_id, userId, comment, currDate);
     this.replyFormData.get('replyComment')?.setValue(null);
   }
 
-  submitComment(id: string) {
+  submitComment(id: string, userId: string) {
     const currDate = new Date();
-    let user = this.formData.get('name')?.value;
     const comment = this.formData.get('comment')?.value;
-    if (user === '') {
-      user = 'Guest';
-    }
+
     this.addCommentDate = currDate;
-    this.addCommentName = user;
+    this.addCommentUserId = userId;
     this.addCommentText = comment;
-    this.poopService.addComment(id, user, comment, currDate);
+    console.log(id, userId, comment, currDate);
+    this.poopService.submitComment(id, userId, comment, currDate);
     this.formData.get('comment')?.setValue(null);
   }
 

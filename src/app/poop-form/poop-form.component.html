@@ -1,117 +1,112 @@
 
-this page is under development and should be available with new features by 03/13/24
 
-<!--<div style="display: flex;justify-content: center; align-items: center;">-->
+<div style="display: flex;justify-content: center; align-items: center;">
 
-<!--  <mat-card appearance="outlined" style="width: 100%;">-->
-<!--    <ng-container *ngIf="isLoggedIn else notLoggedIn">-->
+  <mat-card appearance="outlined" style="width: 100%;">
+    <ng-container *ngIf="isLoggedIn else notLoggedIn">
 
-<!--      <div style="display: flex;justify-content: center; align-items: center;font-size: 36px;-->
-<!--    margin-top: 25px; line-height: 1.2; margin-left: 15px; margin-right: 15px;">-->
-<!--        <i>{{ helpText }}</i>-->
-<!--      </div>-->
-<!--      <div>-->
+      <div style="display: flex;justify-content: center; align-items: center;font-size: 36px;
+    margin-top: 25px; line-height: 1.2; margin-left: 15px; margin-right: 15px;">
+        <i>{{ helpText }}</i>
+      </div>
+      <div>
 
-<!--        <form style="width: 100%" [formGroup]="formData">-->
-<!--          <div style="display: flex;justify-content: center; align-items: center;margin-top: 30px;">-->
-<!--            <mat-label style="color: dimgray; margin-bottom: 2px;"><i>Your Rating</i></mat-label>-->
-<!--          </div>-->
-<!--          <star-rating-control formControlName="rating" id="rating" required [starType]="'svg'" [size]="$any('large')"-->
-<!--                               speed="slow">-->
-<!--          </star-rating-control>-->
-<!--          &lt;!&ndash;          <br>&ndash;&gt;-->
-<!--          &lt;!&ndash;          <mat-form-field style="width: 100%;">&ndash;&gt;-->
-<!--          &lt;!&ndash;            <mat-label>What's your name?</mat-label>&ndash;&gt;-->
-<!--          &lt;!&ndash;            <input matInput id="name" formControlName="name">&ndash;&gt;-->
-<!--          &lt;!&ndash;          </mat-form-field>&ndash;&gt;-->
-<!--          <br>-->
-<!--          <div style="display: flex;justify-content: center; align-items: center;">-->
-<!--            <mat-form-field style="width: 100%; max-width: 600px; margin-left: 10px; margin-right: 10px;">-->
-<!--              <mat-label>Tell us how your poop went.</mat-label>-->
-<!--              <textarea matInput rows="6" id="description" formControlName="description"></textarea>-->
-<!--            </mat-form-field>-->
-<!--          </div>-->
+        <form style="width: 100%" [formGroup]="formData">
+          <div style="display: flex;justify-content: center; align-items: center;margin-top: 30px;">
+            <mat-label style="color: dimgray; margin-bottom: 2px;"><i>Your Rating</i></mat-label>
+          </div>
+          <star-rating-control formControlName="rating" id="rating" required [starType]="'svg'" [size]="$any('large')"
+                               speed="slow">
+          </star-rating-control>
 
-<!--          <div style="display: flex;justify-content: center; align-items: center;">-->
+          <br>
+          <div style="display: flex;justify-content: center; align-items: center;">
+            <mat-form-field style="width: 100%; max-width: 600px; margin-left: 10px; margin-right: 10px;">
+              <mat-label>Tell us how your poop went.</mat-label>
+              <textarea matInput rows="6" id="description" formControlName="description"></textarea>
+            </mat-form-field>
+          </div>
 
-<!--            <button mat-raised-button (click)="getLocation()"-->
-<!--                    style="font-family: serif; background-color: forestgreen;width: 80%;  max-width: 600px; font-size: 14px; color: white">-->
-<!--              <b>📍 Add Your Location</b></button>-->
+          <div style="display: flex;justify-content: center; align-items: center;">
 
-<!--          </div>-->
+            <button mat-raised-button (click)="getLocation()"
+                    style="font-family: serif; background-color: forestgreen;width: 80%;  max-width: 600px; font-size: 14px; color: white">
+              <b>📍 Add Your Location</b></button>
 
-<!--          <br>-->
+          </div>
 
-<!--          <ng-container *ngIf="poopLocation">-->
-<!--            <ng-container *ngIf="poopLocation.city; else noLocFound">-->
-<!--              <div style="display: flex;justify-content: center; align-items: center;">-->
-<!--                Your toilet sent back your location as<br>-->
-<!--              </div>-->
-<!--              <div style="display: flex;justify-content: center; align-items: center;">-->
-<!--                <i><b><span style="color: #3366ff"> {{ this.poopLocation.fullAddr }} </span></b></i>-->
-<!--              </div>-->
-<!--            </ng-container>-->
+          <br>
 
-<!--            <ng-template #noLocFound>-->
-<!--              <div style="display: flex;justify-content: center; align-items: center;">-->
-<!--                No location found! You must be pooping out in the woods.<br>-->
-<!--              </div>-->
-<!--            </ng-template>-->
-<!--          </ng-container>-->
+          <ng-container *ngIf="poopLocation">
+            <ng-container *ngIf="poopLocation.city; else noLocFound">
+              <div style="display: flex;justify-content: center; align-items: center;">
+                Your toilet sent back your location as<br>
+              </div>
+              <div style="display: flex;justify-content: center; align-items: center;">
+                <i><b><span style="color: #3366ff"> {{ this.poopLocation.fullAddr }} </span></b></i>
+              </div>
+            </ng-container>
 
-<!--          <ng-container *ngIf="!locationPermission">-->
-<!--            <div-->
-<!--              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">-->
-<!--              Your device has location permissions <span style="margin-left: 3px;"><b><u>off.</u></b></span>-->
-<!--            </div>-->
-<!--            <br>-->
-<!--            <div-->
-<!--              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">-->
-<!--              Make sure this browser + webpage have access to your location and try again.-->
-<!--            </div>-->
-<!--          </ng-container>-->
+            <ng-template #noLocFound>
+              <div style="display: flex;justify-content: center; align-items: center;">
+                No location found! You must be pooping out in the woods.<br>
+              </div>
+            </ng-template>
+          </ng-container>
+
+          <ng-container *ngIf="!locationPermission">
+            <div
+              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">
+              Your device has location permissions <span style="margin-left: 3px;"><b><u>off.</u></b></span>
+            </div>
+            <br>
+            <div
+              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">
+              Make sure this browser + webpage have access to your location and try again.
+            </div>
+          </ng-container>
 
 
-<!--          <ng-container *ngIf="unknownError">-->
-<!--            <div-->
-<!--              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">-->
-<!--              Your phone didn't return a location!-->
-<!--            </div>-->
-<!--            <br>-->
-<!--            <div-->
-<!--              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">-->
-<!--              Move a couple miles to your left and try again.-->
-<!--            </div>-->
-<!--          </ng-container>-->
+          <ng-container *ngIf="unknownError">
+            <div
+              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">
+              Your phone didn't return a location!
+            </div>
+            <br>
+            <div
+              style="display: flex;justify-content: center; align-items: center; padding-left: 25px; padding-right: 25px;">
+              Move a couple miles to your left and try again.
+            </div>
+          </ng-container>
 
-<!--          <br>-->
-<!--          <div style="display: flex;justify-content: center; align-items: center;">-->
+          <br>
+          <div style="display: flex;justify-content: center; align-items: center;">
 
-<!--            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>-->
+            <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
 
-<!--            <button mat-raised-button [class.spinner]="loading" [disabled]="loading" type="submit" (click)="onSubmit()"-->
-<!--                    style="font-family: serif; background-color: #3366ff;width: 80%;-->
-<!--                      max-width: 600px;font-size: 19px; color: white; margin-bottom: 20px;">-->
-<!--              <b>{{ this.buttonText }}</b></button>-->
-<!--          </div>-->
-<!--        </form>-->
+            <button mat-raised-button [class.spinner]="loading" [disabled]="loading" type="submit" (click)="onSubmit()"
+                    style="font-family: serif; background-color: #3366ff;width: 80%;
+                      max-width: 600px;font-size: 19px; color: white; margin-bottom: 20px;">
+              <b>{{ this.buttonText }}</b></button>
+          </div>
+        </form>
 
-<!--      </div>-->
-<!--      <br>-->
-<!--    </ng-container>-->
-<!--    <ng-template #notLoggedIn>-->
+      </div>
+      <br>
+    </ng-container>
+    <ng-template #notLoggedIn>
 
-<!--      <div style="display: flex;justify-content: center; align-items: center;font-size: 36px;-->
-<!--    margin-top: 25px; line-height: 1.2; margin-left: 15px; margin-right: 15px;">-->
-<!--        Log in to submit a diary entry📝-->
-<!--      </div>-->
+      <div style="display: flex;justify-content: center; align-items: center;font-size: 36px;
+    margin-top: 25px; line-height: 1.2; margin-left: 15px; margin-right: 15px;">
+        Log in to submit a diary entry📝
+      </div>
 
-<!--      <div style="display: flex;justify-content: center; align-items: center; margin-top: 25px; margin-bottom: 25px;">-->
+      <div style="display: flex;justify-content: center; align-items: center; margin-top: 25px; margin-bottom: 25px;">
 
-<!--        <button mat-raised-button title="Log in to comment" (click)="auth.loginWithRedirect()"-->
-<!--                style="font-family: serif; background-color: black; color: white; width: 60%;"><b>🔑&ensp;&ensp;Log in-->
-<!--        </b></button>-->
-<!--      </div>-->
-<!--    </ng-template>-->
-<!--  </mat-card>-->
-<!--</div>-->
+        <button mat-raised-button title="Log in to comment" (click)="auth.loginWithRedirect()"
+                style="font-family: serif; background-color: black; color: white; width: 60%;"><b>🔑&ensp;&ensp;Log in
+        </b></button>
+      </div>
+    </ng-template>
+  </mat-card>
+</div>
