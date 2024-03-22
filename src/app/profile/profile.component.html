@@ -50,8 +50,12 @@
             <br><br>
             <mat-form-field style="width: 100%;">
               <mat-label>Your Bio</mat-label>
-              <textarea matInput rows="2" id="bio" style="font-family: 'Cascadia Code',serif; font-size: 16px;"
-                        [ngModel]="profileUser.user_metadata.bio" (input)="changeBio($event)">
+              <textarea matInput id="bio"
+                        cdkTextareaAutosize
+                        [cdkAutosizeMinRows]="4"
+                        style="font-family: 'Cascadia Code',serif; font-size: 16px;"
+                        [ngModel]="profileUser.user_metadata.bio"
+                        (input)="changeBio($event)">
               </textarea>
               <button *ngIf="profileUser.user_metadata.bio" matSuffix mat-icon-button aria-label="Clear"
                       (click)="this.editingBio = !this.editingBio;">

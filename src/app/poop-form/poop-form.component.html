@@ -23,7 +23,8 @@
           <div style="display: flex;justify-content: center; align-items: center;">
             <mat-form-field style="width: 100%; max-width: 600px; margin-left: 10px; margin-right: 10px;">
               <mat-label>Tell us how your poop went.</mat-label>
-              <textarea matInput rows="6" id="description" formControlName="description"></textarea>
+              <textarea matInput cdkTextareaAutosize [cdkAutosizeMinRows]="4"
+                        id="description" formControlName="description"></textarea>
             </mat-form-field>
           </div>
 

@@ -264,7 +264,9 @@
                         <div style="display: flex;justify-content: left; align-items: center;">
                           <mat-form-field style="width: 80%;">
                             <mat-label>Your reply</mat-label>
-                            <textarea matInput rows="1" style="resize: none;overflow: hidden" id="replyComment"
+                            <textarea matInput
+                                      cdkTextareaAutosize
+                                      id="replyComment"
                                       formControlName="replyComment">
                         </textarea>
                           </mat-form-field>
@@ -360,7 +362,8 @@
                 <div style="display: flex;justify-content: left; align-items: center;">
                   <mat-form-field style="width: 80%;">
                     <mat-label>Your comment</mat-label>
-                    <textarea matInput rows="1" style="resize: none;overflow: hidden" id="comment"
+                    <textarea matInput id="comment"
+                              cdkTextareaAutosize
                               formControlName="comment">
             </textarea>
                   </mat-form-field>

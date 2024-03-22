@@ -111,8 +111,7 @@ export class PoopDiariesComponent implements OnInit {
   }
 
 
-  showMoreEntries()
-  {
+  showMoreEntries() {
     this.entriesToShow += 15;
   }
 
