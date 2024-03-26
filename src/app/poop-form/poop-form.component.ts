@@ -68,7 +68,7 @@ export class PoopFormComponent implements OnInit {
                       )
                     ),
                     tap((ayeUser: any) => {
-                        this.ayeUser = res;
+                        this.ayeUser = ayeUser;
                         this.setAyeUser(ayeUser);
                       }
                     )

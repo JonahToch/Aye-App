@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
                   tap((ayeUser: any) => {
                       console.log(ayeUser);
                       this.setAyeUser(ayeUser);
-                      this.ayeUser = res;
+                      this.ayeUser = ayeUser;
                     }
                   )
                 )
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
           },
         )
       }
-    })
+    });
   }
 
   ngOnInit(): void {

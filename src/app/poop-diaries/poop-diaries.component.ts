@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Poop} from "../models/poop";
 import {concatMap, isEmpty, Observable, of, Subscription, tap} from "rxjs";
@@ -75,7 +75,7 @@ export class PoopDiariesComponent implements OnInit {
                       )
                     ),
                     tap((ayeUser: any) => {
-                        this.ayeUser = res;
+                        this.ayeUser = ayeUser;
                         this.setAyeUser(ayeUser);
                       }
                     )

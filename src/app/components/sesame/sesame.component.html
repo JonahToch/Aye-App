@@ -1,90 +1,168 @@
 <br><br>
 <div style="display: flex; justify-content: center">
-  <p style="font-size: 36px"><i>Sesame🥯</i></p>
+  <p style="font-size: 36px"><i> Open Sesame🥯</i></p>
 </div>
 <br><br><br>
 
-<div style="display: flex; justify-content: center; align-items: center;" role="group">
+<ng-container *ngIf="this.ayeUser?.user_id !== '' else notLoggedIn">
 
-  <button mat-raised-button (click)="assignNewSesame()"
-          style="font-family: serif; background-color: olivedrab; height: 88px;
+  <div style="display: flex; justify-content: center; align-items: center;" role="group">
+
+    <button mat-raised-button (click)="assignNewSesame()"
+            style="font-family: serif; background-color: olivedrab; height: 88px;
     width: 40%; margin-right: 3%;
     max-width: 200px; font-size: 18px;">
-    <b>📜<br>Assign New<br> Sesame<br></b>
-  </button>
-
-  <button mat-raised-button (click)="openSesame()"
-          style="font-family: serif; background-color: cadetblue; height: 88px;
-          width: 40%; margin-left: 3%;
-          max-width: 200px; font-size: 18px;">
-    <b>
-      🚪<br> Open<br> Door<br>
-    </b>
-  </button>
-</div>
-<br>
-
-<ng-container *ngIf="assigningSesame">
-
-  <div style="display: flex; justify-content: center; overflow: hidden">
-    <form style="width: 100%; display: flex; justify-content: center;" [formGroup]="formData">
-      <mat-form-field style="width: 95%; max-width: 500px">
-        <mat-label><i>Sesame ID</i></mat-label>
-        <input matInput id="sesameId" formControlName="sesameId">
-        <mat-hint>The ID found on your Sesame device</mat-hint>
-      </mat-form-field>
-    </form>
-
-  </div>
-  <br>
-  <div style="display: flex; justify-content: center; overflow: hidden">
-    <button mat-raised-button (click)="claimSesame()"
-            style="font-family: serif; background-color: maroon; height: 88px;
-    width: 40%; margin-right: 3%;
-    max-width: 200px; font-size: 18px; color: white">
-      <b>⛏️<br>Claim<br> Sesame<br></b>
+      <b>📜<br>Assign New<br> Sesame<br></b>
     </button>
-  </div>
-
-</ng-container>
-<br>
-
-<ng-container *ngIf="loading">
-  <div style="display: flex; justify-content: center; margin-top: 10%;">
-    <mat-spinner></mat-spinner>
-  </div>
-  <div style="display: flex; justify-content: center; margin-top: 10%;">
-    <b>Opening door....</b>
-  </div>
-</ng-container>
-
-<div style="display: flex; justify-content: center; overflow: hidden">
-  <mat-error *ngIf="openSesameStatus === 'failure'"
-             style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold">
-    Opening the door failed.
-
-    <br><br>
-    Make sure the device is powered and on.
-  </mat-error>
-  <div *ngIf="openSesameStatus === 'success'"
-       style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold; color: green">
-    The door was opened.
 
   </div>
+  <ng-container *ngIf="assigningSesame">
+    <br>
+    <mat-divider></mat-divider>
+    <br>
 
-  <div style="display: flex; justify-content: center; overflow: hidden">
-    <mat-error *ngIf="assigningSesameStatus === 'failure'"
-               style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold">
-      Assigning the Sesame failed.
-
-
-    </mat-error>
-    <div *ngIf="assigningSesameStatus === 'success'"
-         style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold; color: green">
-      The Sesame was assigned successfully!
+    <div style="display: flex; justify-content: center; overflow: hidden">
+      <form style="width: 100%; display: flex; justify-content: center;" [formGroup]="formData">
+        <mat-form-field style="width: 95%; max-width: 500px">
+          <mat-label><i>Sesame ID</i></mat-label>
+          <input matInput id="sesameId" formControlName="sesameId">
+          <mat-hint>The ID found on your Sesame device</mat-hint>
+        </mat-form-field>
+      </form>
 
     </div>
+    <br>
+    <div style="display: flex; justify-content: center; overflow: hidden">
+      <button mat-raised-button (click)="claimSesame(this.ayeUser?.user_id!)"
+              style="font-family: serif; background-color: maroon; height: 88px;
+    width: 40%; margin-right: 3%;
+    max-width: 200px; font-size: 18px; color: white">
+        <b>⛏️<br>Claim<br> Sesame<br></b>
+      </button>
+    </div>
+    <br><br>
+    <mat-divider></mat-divider>
+  </ng-container>
 
-</div>
+
+  <br>
 
 
+  <ng-container *ngIf="sesameArray$ | async as sesameArray">
+
+    <div style="display: flex;justify-content: center; align-items: center;">
+      <h1 style="font-size: 32px;">
+
+        <ng-container *ngIf="sesameArray.length === 1">
+          Your Sesame
+        </ng-container>
+        <ng-container *ngIf="sesameArray.length > 1">
+          Your Sesames
+        </ng-container>
+      </h1>
+    </div>
+  </ng-container>
+
+  <ng-container *ngFor="let sesames of sesameArray$ | async; let i = index;">
+
+
+    <div style="display: flex;justify-content: center; align-items: center;">
+
+      <mat-card appearance="outlined" style="width: 95%; max-width: 450px;">
+
+        <div style="display: flex; justify-content: center; align-items: center;" role="group">
+          <h1 style="color: #3366FF; font-size: 22px;"><b>Lox 100🍣</b></h1>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center;" role="group">
+
+          <!--    <button mat-raised-button (click)="assignNewSesame()"-->
+          <!--            style="font-family: serif; background-color: olivedrab; height: 88px;-->
+          <!--    width: 40%; margin-right: 3%;-->
+          <!--    max-width: 200px; font-size: 18px;">-->
+          <!--      <b>📜<br>Assign New<br> Sesame<br></b>-->
+          <!--    </button>-->
+
+          <button mat-raised-button (click)="openSesame()"
+                  style="font-family: serif; background-color: cadetblue; height: 88px;
+          width: 80%; margin-bottom: 10%;
+          max-width: 200px; font-size: 18px;">
+            <b>
+              🚪<br> Open<br> Door<br>
+            </b>
+          </button>
+
+        </div>
+        <div
+          style="display: flex; justify-content: left; align-items: center; color: gray; opacity: .98; font-size: 12px; margin-left: 2%;"
+          role="group">
+          <b>
+            Registered on: <span style="color: darkblue;">03/21/24</span>
+            <br>
+            Sesame ID:<span style="color: darkblue;"> {{ sesames.sesameId }}</span>
+          </b>
+        </div>
+      </mat-card>
+    </div>
+
+    <ng-container *ngIf="loading">
+      <div style="display: flex; justify-content: center; margin-top: 10%;">
+        <mat-spinner></mat-spinner>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 10%;">
+        <b>Opening door....</b>
+      </div>
+    </ng-container>
+
+    <div style="display: flex; justify-content: center; overflow: hidden; margin-top: 5px;">
+      <mat-error *ngIf="openSesameStatus === 'failure'"
+                 style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold">
+        Opening the door failed.
+
+        <br><br>
+        Make sure the device is powered and on.
+      </mat-error>
+      <div *ngIf="openSesameStatus === 'success'"
+           style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold; color: green">
+        The door was opened.
+
+      </div>
+
+      <div style="display: flex; justify-content: center; overflow: hidden">
+        <mat-error *ngIf="assigningSesameStatus === 'failure'"
+                   style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold">
+          Assigning the Sesame failed.
+
+
+        </mat-error>
+        <div *ngIf="assigningSesameStatus === 'success'"
+             style="margin-left: 15px; margin-right: 15px; margin-bottom: 5px; font-weight: bold; color: green">
+          The Sesame was assigned successfully!
+
+        </div>
+
+      </div>
+    </div>
+    <br>
+  </ng-container>
+
+  <br>
+</ng-container>
+
+
+<!--  >-->
+
+
+<ng-template #notLoggedIn>
+
+  <div style="display: flex; justify-content: center; align-items: center;" role="group">
+
+    <h1>Login to access Sesame features</h1>
+  </div>
+
+  <div style="display: flex; justify-content: center; align-items: center;">
+
+    <app-authbutton style="width: 100%;"></app-authbutton>
+
+
+  </div>
+</ng-template>
