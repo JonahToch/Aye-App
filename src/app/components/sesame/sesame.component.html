@@ -4,7 +4,7 @@
 </div>
 <br><br><br>
 
-<ng-container *ngIf="this.ayeUser?.user_id !== '' else notLoggedIn">
+<ng-container *ngIf="this.ayeUser?.user_id else notLoggedIn">
 
   <div style="display: flex; justify-content: center; align-items: center;" role="group">
 
@@ -15,7 +15,26 @@
       <b>📜<br>Assign New<br> Sesame<br></b>
     </button>
 
+    <button mat-raised-button (click)="generateNewSesame('Lox 100')"
+            style="font-family: serif; background-color: darksalmon; height: 88px;
+    width: 40%; margin-right: 3%;
+    max-width: 200px; font-size: 18px;">
+      <b>🍣<br>Generate New Lox 100<br></b>
+    </button>
+
   </div>
+
+  <ng-container *ngIf="this.newSesameId">
+    <br>
+    <div style="display: flex; justify-content: center; margin-left: 5%; margin-right: 5%; ">
+      <h1>New sesame generated!</h1>
+    </div>
+    <br>
+
+    <div style="display: flex; justify-content: center; margin-left: 5%; margin-right: 5%; ">
+      <h3>{{ this.newSesameId }}</h3>
+    </div>
+  </ng-container>
   <ng-container *ngIf="assigningSesame">
     <br>
     <mat-divider></mat-divider>
@@ -61,6 +80,15 @@
         </ng-container>
       </h1>
     </div>
+
+    <!--    <ng-container *ngIf="sesameArray.length === 0">-->
+    <!--      <div style="display: flex;justify-content: center; align-items: center;">-->
+    <!--        <h1 style="font-size: 32px;">-->
+    <!--        You don't have any Sesames.-->
+    <!--        </h1>-->
+    <!--      </div>-->
+    <!--    </ng-container>-->
+
   </ng-container>
 
   <ng-container *ngFor="let sesames of sesameArray$ | async; let i = index;">
@@ -96,9 +124,11 @@
           style="display: flex; justify-content: left; align-items: center; color: gray; opacity: .98; font-size: 12px; margin-left: 2%;"
           role="group">
           <b>
-            Registered on: <span style="color: darkblue;">03/21/24</span>
+            Registered on: <span style="color: darkblue;">{{ sesames.registerDate | date:'MM/dd/yy' }}</span>
             <br>
             Sesame ID:<span style="color: darkblue;"> {{ sesames.sesameId }}</span>
+            <br>
+<!--             98%🪫🔋-->
           </b>
         </div>
       </mat-card>

@@ -17,7 +17,8 @@ import {Sesame} from "../../interfaces/sesame";
 export class SesameComponent {
 
   openSesameStatus = '';
-  assigningSesameStatus = ''
+  assigningSesameStatus = '';
+  newSesameId = '';
   loading = false;
   assigningSesame = false;
   ayeUser: AyeUser | undefined;
@@ -87,12 +88,12 @@ export class SesameComponent {
     return this.sesameService.getSesame(userId);
   }
 
-  claimSesame(userId: string,) {
+  claimSesame(userId: string) {
     this.loading = true;
     this.openSesameStatus = '';
 
     const body = {
-      "sesameId": this.formData.get('sesameId'),
+      "sesameId": this.formData.get('sesameId')?.value,
       "userId": userId,
     }
     this.http.post('https://jonahtoch.com/api/v1/sesame', body).subscribe(
@@ -109,6 +110,31 @@ export class SesameComponent {
         },
         complete: () => {
           this.loading = false;
+        }
+      }
+    )
+  }
+
+  generateNewSesame(submodel: string) {
+    if (!submodel) {
+      return;
+    }
+
+    const body = {
+      "sesameId": 'NEW',
+      "submodel": submodel,
+    }
+  console.log(body);
+    this.http.post('https://jonahtoch.com/api/v1/sesame', body).subscribe(
+      {
+        next: (res: any) => {
+          console.log(res);
+          this.newSesameId = res.sesame.sesameId;
+        },
+        error: err => {
+          console.log(err);
+        },
+        complete: () => {
         }
       }
     )

@@ -23,11 +23,20 @@ export class SesameService {
     const url: string = `${environment.mainApiUrl}/sesame?userId=` + userId;
     return this.http.get<Sesame[]>(url)
       .pipe(map(res => {
-          this.sesameData_.next(res);
           console.log(res);
-          return res;
+          let usersSesames = [];
+          for (let i = 0; i < res.length; i++) {
+            if (res[i].userId === userId) {
+              usersSesames.push(res[i]);
+            }
+          }
+          this.sesameData_.next(usersSesames);
+          return usersSesames;
         }),
       );
   }
+
+
+
 
 }

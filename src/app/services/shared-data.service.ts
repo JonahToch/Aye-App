@@ -58,7 +58,7 @@ export class SharedDataService {
 
   getUserById(userId: string, managementAuthToken: string) {
 
-   const cacheKey = userId;
+    const cacheKey = userId;
 
     if (this.userCache.has(cacheKey)) {
       return of(this.userCache.get(cacheKey));
